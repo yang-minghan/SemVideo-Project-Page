@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SemVideo | CVPR 2026 Project Page</title>
+  <meta name="description" content="SemVideo reconstructs watched videos from fMRI signals with hierarchical semantic guidance.">
+  <link rel="icon" type="image/png" href="assets/video-camera.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <div class="brand-mark">
+        <img src="assets/video-camera.png" alt="SemVideo logo" class="brand-icon">
+        <div>
+          <p class="eyebrow">CVPR 2026</p>
+          <p class="brand-name">SemVideo Project Page</p>
+        </div>
+      </div>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="#overview">Overview</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#resources">Resources</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero card">
+        <div class="hero-copy">
+          <p class="eyebrow">Reconstructing dynamic perception from brain activity</p>
+          <h1>SemVideo: Reconstructs What You Watch from Brain Activity via Hierarchical Semantic Guidance</h1>
+          <p class="authors">
+            Minghan Yang<sup>1</sup>, Lan Yang<sup>1*</sup>, Ke Li<sup>1</sup>, Honggang Zhang<sup>1</sup>, Kaiyue Pang<sup>2</sup>, Yi-Zhe Song<sup>2</sup>
+          </p>
+          <p class="affiliations">
+            <span><sup>1</sup>Beijing University of Posts and Telecommunications</span>
+            <span><sup>2</sup>University of Surrey</span>
+          </p>
+          <p class="lede">
+            SemVideo tackles two long-standing challenges in fMRI-to-video reconstruction:
+            <strong>appearance mismatch</strong> across frames and <strong>motion misalignment</strong> over time.
+            It uses hierarchical semantic guidance to decode what a subject watched with stronger semantic fidelity and temporal coherence.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="assets/SemVideo_CVPR2026.pdf">Paper</a>
+            <a class="button" href="https://github.com/yang-minghan/SemVideo">Code</a>
+            <a class="button" href="https://huggingface.co/datasets/YanmHa/SemVideo">Dataset</a>
+            <a class="button" href="mailto:yangminghan@bupt.edu.cn">Contact</a>
+          </div>
+        </div>
+        <div class="hero-panel">
+          <div class="signal-card">
+            <p class="signal-title">What makes video reconstruction hard?</p>
+            <div class="signal-list">
+              <div>
+                <span class="signal-badge">Issue 01</span>
+                <p>Salient objects drift in shape, identity, or appearance.</p>
+              </div>
+              <div>
+                <span class="signal-badge">Issue 02</span>
+                <p>Temporal transitions become unstable, abrupt, or semantically wrong.</p>
+              </div>
+              <div>
+                <span class="signal-badge accent">SemVideo</span>
+                <p>Hierarchical semantics provide anchor, motion, and holistic guidance for decoding and rendering.</p>
+              </div>
+            </div>
+          </div>
+          <div class="stat-grid">
+            <article>
+              <strong>8 / 10</strong>
+              <span>best metrics on public benchmarks</span>
+            </article>
+            <article>
+              <strong>0.865</strong>
+              <span>2-way-V retrieval on CC2017</span>
+            </article>
+            <article>
+              <strong>0.526</strong>
+              <span>CLIP temporal similarity on CC2017</span>
+            </article>
+            <article>
+              <strong>4.05</strong>
+              <span>EPE on HCP, lower is better</span>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="overview" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Overview</p>
+          <h2>From slow BOLD responses to coherent video dynamics</h2>
+        </div>
+        <div class="overview-grid">
+          <article class="card prose-card">
+            <p>
+              Reconstructing dynamic visual experiences from fMRI signals is substantially harder than static image decoding because
+              blood-oxygen-level-dependent signals integrate information across seconds rather than individual frames.
+              Previous methods therefore struggle to preserve consistent object identity and realistic motion.
+            </p>
+            <p>
+              SemVideo addresses this by introducing <strong>hierarchical semantic supervision</strong>. Instead of asking the model to infer every
+              pixel directly, it first mines multi-level semantic descriptions from the original stimulus and then aligns brain activity
+              with those descriptions before rendering the final video.
+            </p>
+          </article>
+          <article class="card contribution-card">
+            <h3>Core contributions</h3>
+            <ul class="feature-list">
+              <li><strong>SemMiner</strong> decomposes the stimulus into anchor descriptions, motion narratives, and holistic summaries.</li>
+              <li><strong>SAD</strong> aligns cross-subject fMRI signals to CLIP-style semantic embeddings.</li>
+              <li><strong>MAD</strong> reconstructs motion patterns with spatial, temporal, and semantic-guided attention fusion.</li>
+              <li><strong>Conditional Video Render</strong> progressively fuses static, dynamic, and global semantics for generation.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="method" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Method</p>
+          <h2>A staged pipeline guided by three levels of semantics</h2>
+        </div>
+        <figure class="card figure-card">
+          <img src="assets/pipeline.png" alt="SemVideo pipeline overview">
+          <figcaption>
+            The full SemVideo pipeline couples hierarchical semantic mining with fMRI semantic alignment, motion adaptation, and conditional video rendering.
+          </figcaption>
+        </figure>
+        <div class="method-grid">
+          <article class="card method-card">
+            <span class="step-tag">01</span>
+            <h3>SemMiner</h3>
+            <p>
+              A multimodal LLM breaks each stimulus into three complementary descriptions: what the first frame depicts, how objects move,
+              and what the overall event means.
+            </p>
+          </article>
+          <article class="card method-card">
+            <span class="step-tag">02</span>
+            <h3>Semantic Alignment Decoder</h3>
+            <p>
+              Subject-specific projectors and a shared mapper decode semantic embeddings from fMRI while reducing cross-subject variation and noise.
+            </p>
+          </article>
+          <article class="card method-card">
+            <span class="step-tag">03</span>
+            <h3>Motion Adaptation Decoder</h3>
+            <p>
+              A tripartite fusion design integrates spatial self-attention, temporal self-attention, and semantic-guided cross-attention to recover motion latents.
+            </p>
+          </article>
+          <article class="card method-card">
+            <span class="step-tag">04</span>
+            <h3>Conditional Video Render</h3>
+            <p>
+              The renderer progressively conditions generation on anchor, motion, and holistic cues so the final video stays both semantically grounded and temporally coherent.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="results" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Results</p>
+          <h2>State-of-the-art reconstruction quality on CC2017 and HCP</h2>
+        </div>
+        <div class="results-grid">
+          <figure class="card figure-card">
+            <img src="assets/results.png" alt="Quantitative comparison table">
+            <figcaption>
+              On CC2017, SemVideo achieves the best 2-way-V, 50-way-V, Hue-PCC, CLIP similarity, and EPE while staying competitive on SSIM and PSNR.
+            </figcaption>
+          </figure>
+          <article class="card callout-card">
+            <h3>Quantitative highlights</h3>
+            <ul class="feature-list compact">
+              <li><strong>CC2017:</strong> 0.838 2-way-I, 0.865 2-way-V, 0.264 50-way-V, 0.526 CLIP similarity, 4.788 EPE.</li>
+              <li><strong>HCP:</strong> 0.815 2-way-I, 0.796 2-way-V, 0.858 Hue-PCC, 0.523 CLIP similarity, 4.05 EPE.</li>
+              <li><strong>Ablation:</strong> removing anchor semantics hurts semantic fidelity most, while removing motion semantics causes the biggest temporal drop.</li>
+              <li><strong>Interpretability:</strong> ROI analysis links anchor signals to visual regions and motion guidance to MT, MST, TPOJ, and V1.</li>
+            </ul>
+          </article>
+        </div>
+        <figure class="card figure-card wide">
+          <img src="assets/samples.png" alt="Qualitative comparison samples">
+          <figcaption>
+            Qualitative examples show more stable object identity, cleaner scene understanding, and stronger motion continuity than prior methods.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Takeaway</p>
+          <h2>Why hierarchical semantics matter</h2>
+        </div>
+        <div class="takeaway-grid">
+          <article class="card takeaway-card">
+            <h3>Better semantic grounding</h3>
+            <p>
+              Anchor and holistic descriptions give the model stable targets for scene identity, object appearance, and event-level meaning.
+            </p>
+          </article>
+          <article class="card takeaway-card">
+            <h3>Better motion decoding</h3>
+            <p>
+              Motion-oriented narratives and the MAD module contribute measurable gains in temporal order, optical flow consistency, and action coherence.
+            </p>
+          </article>
+          <article class="card takeaway-card">
+            <h3>Better neuroscience alignment</h3>
+            <p>
+              ROI-wise importance patterns reveal that different semantic branches draw from distinct visual and motion-sensitive cortical regions.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="resources" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Resources</p>
+          <h2>Explore the paper, code, and dataset</h2>
+        </div>
+        <div class="resources-grid">
+          <article class="card resource-card">
+            <p class="resource-label">Paper</p>
+            <h3>CVPR 2026 manuscript</h3>
+            <p>Download the local PDF included with this project page.</p>
+            <a class="text-link" href="assets/SemVideo_CVPR2026.pdf">Open PDF</a>
+          </article>
+          <article class="card resource-card">
+            <p class="resource-label">Code</p>
+            <h3>Official implementation</h3>
+            <p>Training, inference, and evaluation pipeline for SemVideo.</p>
+            <a class="text-link" href="https://github.com/yang-minghan/SemVideo">View repository</a>
+          </article>
+          <article class="card resource-card">
+            <p class="resource-label">Dataset</p>
+            <h3>CC2017-SE on Hugging Face</h3>
+            <p>Hierarchical semantic guidance resources released with the project.</p>
+            <a class="text-link" href="https://huggingface.co/datasets/YanmHa/SemVideo">Open dataset</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Citation</p>
+          <h2>BibTeX</h2>
+        </div>
+        <article class="card code-card">
+<pre><code>@inproceedings{yang2026semvideo,
+  title     = {SemVideo: Reconstructs What You Watch from Brain Activity via Hierarchical Semantic Guidance},
+  author    = {Yang, Minghan and Yang, Lan and Li, Ke and Zhang, Honggang and Pang, Kaiyue and Song, Yi-Zhe},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year      = {2026}
+}</code></pre>
+        </article>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>For questions or collaboration, contact <a href="mailto:yangminghan@bupt.edu.cn">yangminghan@bupt.edu.cn</a>.</p>
+      <p class="footer-note">Project page crafted from the paper manuscript and repository assets.</p>
+    </footer>
+  </div>
+</body>
+</html>
